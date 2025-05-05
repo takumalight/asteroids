@@ -3,6 +3,7 @@ from constants import *
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+from shot import Shot
 
 def main():
     pygame.init()
@@ -40,6 +41,10 @@ def main():
             if player.collide(asteroid):
                 print("Game over!")
                 exit()
+            for shot in shot_group:
+                if shot.collide(asteroid):
+                    asteroid.split()
+                    shot.kill()
 
         for drawable in draw_group:
             drawable.draw(screen)
