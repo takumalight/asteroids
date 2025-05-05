@@ -1,6 +1,8 @@
 import pygame
 from constants import *
-from player import *
+from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 def main():
     pygame.init()
@@ -9,11 +11,18 @@ def main():
     dt = 0
 
     # Groups
-    updateable = pygame.sprite.Group()
-    drawable = pygame.sprite.Group()
+    update_group = pygame.sprite.Group()
+    draw_group = pygame.sprite.Group()
+    asteroid_group = pygame.sprite.Group()
 
-    Player.containers = (updateable, drawable)
+    Player.containers = (update_group, draw_group)
+    Asteroid.containers = (update_group, draw_group, asteroid_group)
+    AsteroidField.containers = (update_group)
+
+    # Objects
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    asteroid_field = AsteroidField()
+
 
     # Game loop
     while True:
@@ -22,9 +31,10 @@ def main():
                 return
 
         screen.fill("black")
-        updateable.update(dt)
-        for thing in drawable:
-            thing.draw(screen)
+        
+        update_group.update(dt)
+        for drawable in draw_group:
+            drawable.draw(screen)
 
         # Flip must happen last
         dt = clock.tick(60) / 1000.0
